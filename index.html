@@ -9,11 +9,9 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: #f4f5f7; color: #333; padding-bottom: 40px; }
         
-        /* Top Banner */
         .top-bar { background: #111827; color: #fff; padding: 8px 15px; font-size: 12px; text-align: center; }
         .top-bar a { color: #f97316; text-decoration: none; font-weight: bold; margin: 0 5px; }
 
-        /* Header */
         header { background: #fff; padding: 12px 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
         .logo-title { font-size: 20px; font-weight: 900; color: #111; text-decoration: none; }
@@ -26,7 +24,6 @@
         .btn-cart { background: #f97316; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; position: relative; }
         .cart-badge { background: #dc2626; color: #fff; font-size: 10px; border-radius: 50%; padding: 2px 6px; position: absolute; top: -5px; right: -5px; }
 
-        /* Hero */
         .hero { max-width: 1100px; margin: 15px auto; padding: 0 15px; }
         .hero-card { background: linear-gradient(135deg, #111827, #1f2937); color: #fff; padding: 20px; border-radius: 12px; text-align: center; }
         .hero-card h1 { font-size: 22px; margin-bottom: 8px; }
@@ -35,7 +32,6 @@
         .btn-wa { background: #25d366; color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; }
         .btn-call { background: #fff; color: #111; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; }
 
-        /* Search & Products */
         .main-content { max-width: 1100px; margin: 15px auto; padding: 0 15px; }
         .search-box { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; margin-bottom: 15px; outline: none; }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -55,10 +51,359 @@
 
         .empty-state { text-align: center; color: #888; font-size: 13px; grid-column: 1 / -1; padding: 40px 10px; }
 
-        /* Footer Admin Link */
         footer { text-align: center; margin-top: 40px; font-size: 11px; color: #888; }
         footer a { color: #888; text-decoration: none; }
 
-        /* Modal */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; padding: 15px; }
-        .modal-content { background: #fff; width: 100%; max-width: 450px; padding: 20px; border-radius: 12px; max
+        .modal-content { background: #fff; width: 100%; max-width: 450px; padding: 20px; border-radius: 12px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 11px; font-weight: bold; color: #555; margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
+        .btn-submit { width: 100%; background: #f97316; color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; }
+
+        .cart-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; justify-content: flex-end; }
+        .cart-body { background: #fff; width: 100%; max-width: 350px; height: 100%; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+        .cart-items { flex: 1; overflow-y: auto; margin: 15px 0; }
+        .cart-item { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .cart-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }
+        
+        .order-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 12px; }
+        .order-header { display: flex; justify-content: space-between; font-weight: bold; color: #111; margin-bottom: 6px; }
+        .order-date { font-size: 10px; color: #666; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        Call: <a href="tel:+256702234732">+256 702 234 732</a> | Email: <a href="mailto:Jabeljason01@gmail.com">Jabeljason01@gmail.com</a>
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <div>
+                <a href="#" class="logo-title">APEX <span>ONLINE</span></a>
+                <span class="motto">Shopping made easy</span>
+            </div>
+            <div class="header-btns">
+                <button id="addBtn" class="btn-add" onclick="toggleModal('uploadModal')"><i class="fa-solid fa-plus"></i> Upload</button>
+                <button id="ordersBtn" class="btn-orders" onclick="openOrdersModal()"><i class="fa-solid fa-clipboard-list"></i> Orders <span id="orderCount" class="cart-badge">0</span></button>
+                <button class="btn-cart" onclick="toggleModal('cartModal')"><i class="fa-solid fa-cart-shopping"></i> <span id="cartCount" class="cart-badge">0</span></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="hero-card">
+            <h1>Apex Online Store</h1>
+            <p>Quality hardware, protective shields, weighing accessories & essentials in Kampala.</p>
+            <div class="contact-actions">
+                <a href="https://wa.me/256702234732" class="btn-wa" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp Us</a>
+                <a href="tel:+256702234732" class="btn-call"><i class="fa-solid fa-phone"></i> Call Direct</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <input type="text" id="searchBar" class="search-box" placeholder="Search products..." oninput="searchItems()">
+        <div id="productGrid" class="grid"></div>
+    </div>
+
+    <footer>
+        &copy; 2026 Apex Online Store. All rights reserved. | <a href="#" onclick="adminLogin(event)">Admin Access</a>
+    </footer>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Item</h3>
+                <span style="cursor:pointer;" onclick="toggleModal('uploadModal')">&times;</span>
+            </div>
+            <form onsubmit="saveProduct(event)">
+                <div class="form-group">
+                    <label>Item Name</label>
+                    <input type="text" id="pName" required placeholder="e.g. Weighing Scale Shield">
+                </div>
+                <div class="form-group">
+                    <label>Price (UGX)</label>
+                    <input type="number" id="pPrice" required placeholder="e.g. 50000">
+                </div>
+                <div class="form-group">
+                    <label>About / Description</label>
+                    <textarea id="pDesc" rows="3" placeholder="Add specs, dimensions, durability info, etc."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Product Photo</label>
+                    <input type="file" id="pImg" accept="image/*" onchange="convertImg(event)">
+                </div>
+                <button type="submit" class="btn-submit">Publish Product</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Product Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="detailTitle">Product Details</h3>
+                <span style="cursor:pointer;" onclick="toggleModal('detailsModal')">&times;</span>
+            </div>
+            <img id="detailImg" src="" style="width:100%; height:200px; object-fit:cover; border-radius:8px; margin-bottom:12px;">
+            <div id="detailPrice" style="color:#f97316; font-size:18px; font-weight:800; margin-bottom:10px;"></div>
+            <h4 style="font-size:12px; text-transform:uppercase; color:#666; margin-bottom:4px;">About this Item</h4>
+            <div id="detailDesc" style="font-size:13px; color:#444; line-height:1.5; margin-bottom:15px; background:#f9fafb; padding:10px; border-radius:6px; border:1px solid #eee;"></div>
+            <div id="detailActions" style="display:flex; gap:8px;"></div>
+        </div>
+    </div>
+
+    <!-- Orders Control Center Modal -->
+    <div id="ordersModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Customer Orders Control Center</h3>
+                <span style="cursor:pointer;" onclick="toggleModal('ordersModal')">&times;</span>
+            </div>
+            <div id="ordersList" style="max-height: 350px; overflow-y: auto; margin-bottom: 15px;"></div>
+            <button class="btn-submit" onclick="clearOrders()" style="background:#dc2626;">Clear All Orders</button>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-body">
+            <div>
+                <div class="modal-header">
+                    <h3>Your Cart</h3>
+                    <span style="cursor:pointer;" onclick="toggleModal('cartModal')">&times;</span>
+                </div>
+                <div id="cartItems" class="cart-items"></div>
+            </div>
+            <div>
+                <h4 style="margin-bottom:10px;">Total: UGX <span id="cartTotal">0</span></h4>
+                <a href="#" onclick="checkoutWA()" class="btn-wa" style="width:100%; text-align:center; justify-content:center; padding:12px; margin-bottom:8px;"><i class="fa-brands fa-whatsapp"></i> Checkout on WhatsApp</a>
+                <a href="tel:+256702234732" class="btn-call" style="width:100%; text-align:center; justify-content:center; padding:10px; border:1px solid #ccc;"><i class="fa-solid fa-phone"></i> Order via Direct Call</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const initialProducts = [];
+        let products = JSON.parse(localStorage.getItem('apex_store_items')) || initialProducts;
+        let orders = JSON.parse(localStorage.getItem('apex_store_orders')) || [];
+        let cart = [];
+        let tempImg = '';
+
+        if (sessionStorage.getItem('apex_admin') === 'true') {
+            document.getElementById('addBtn').style.display = 'inline-block';
+            document.getElementById('ordersBtn').style.display = 'inline-block';
+            updateOrdersBadge();
+        }
+
+        function adminLogin(e) {
+            e.preventDefault();
+            const pin = prompt('Enter Admin PIN:');
+            if (pin === '2009') {
+                sessionStorage.setItem('apex_admin', 'true');
+                document.getElementById('addBtn').style.display = 'inline-block';
+                document.getElementById('ordersBtn').style.display = 'inline-block';
+                updateOrdersBadge();
+                alert('Admin unlocked! Upload and Orders buttons are now visible.');
+            } else if (pin !== null) {
+                alert('Incorrect PIN!');
+            }
+        }
+
+        function updateOrdersBadge() {
+            document.getElementById('orderCount').innerText = orders.length;
+        }
+
+        function openOrdersModal() {
+            renderOrders();
+            toggleModal('ordersModal');
+        }
+
+        function renderOrders() {
+            const container = document.getElementById('ordersList');
+            if (orders.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:#888; padding:20px;">No incoming orders yet.</p>`;
+                return;
+            }
+
+            container.innerHTML = orders.map((ord, idx) => {
+                let itemsHtml = ord.items.map(i => `• ${i.name} (UGX ${Number(i.price).toLocaleString()})`).join('<br>');
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span>Order #${orders.length - idx}</span>
+                            <span style="color:#f97316;">UGX ${Number(ord.total).toLocaleString()}</span>
+                        </div>
+                        <div class="order-date">${ord.date}</div>
+                        <div style="margin-top:6px; line-height:1.4;">${itemsHtml}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearOrders() {
+            if (confirm('Are you sure you want to clear all order history?')) {
+                orders = [];
+                localStorage.removeItem('apex_store_orders');
+                updateOrdersBadge();
+                renderOrders();
+            }
+        }
+
+        function render() {
+            const grid = document.getElementById('productGrid');
+            if (products.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-box-open" style="font-size:32px; margin-bottom:8px; color:#ccc;"></i>
+                        <p>No products available yet.</p>
+                        <p style="font-size:11px; color:#aaa; margin-top:4px;">Check back soon for new items!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = products.map(p => `
+                <div class="product-card" onclick="viewDetails(${p.id})">
+                    <img src="${p.img}" class="product-img" onerror="this.src='https://via.placeholder.com/150'">
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-price">UGX ${Number(p.price).toLocaleString()}</div>
+                        <div class="product-desc-preview">${p.desc || 'Tap to view full description and specifications.'}</div>
+                    </div>
+                    <div class="card-actions" onclick="event.stopPropagation()">
+                        <button class="btn-buy-card" onclick="addToCart(${p.id})">Add to Cart</button>
+                        <a href="https://wa.me/256702234732?text=I%20want%20to%20buy%20${encodeURIComponent(p.name)}" class="btn-wa-card" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewDetails(id) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('detailTitle').innerText = p.name;
+            document.getElementById('detailImg').src = p.img;
+            document.getElementById('detailPrice').innerText = `UGX ${Number(p.price).toLocaleString()}`;
+            document.getElementById('detailDesc').innerText = p.desc || 'No description provided for this product.';
+            
+            document.getElementById('detailActions').innerHTML = `
+                <button class="btn-submit" onclick="addToCart(${p.id}); toggleModal('detailsModal');" style="flex:1;">Add to Cart</button>
+                <a href="https://wa.me/256702234732?text=I%20want%20to%20buy%20${encodeURIComponent(p.name)}" class="btn-wa" target="_blank" style="align-items:center;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            `;
+
+            toggleModal('detailsModal');
+        }
+
+        function toggleModal(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function convertImg(e) {
+            const reader = new FileReader();
+            reader.onload = function() { tempImg = reader.result; };
+            if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            const name = document.getElementById('pName').value;
+            const price = document.getElementById('pPrice').value;
+            const desc = document.getElementById('pDesc').value;
+            const img = tempImg || 'https://via.placeholder.com/150';
+
+            products.unshift({ id: Date.now(), name, price, desc, img });
+            localStorage.setItem('apex_store_items', JSON.stringify(products));
+            
+            document.getElementById('pName').value = '';
+            document.getElementById('pPrice').value = '';
+            document.getElementById('pDesc').value = '';
+            tempImg = '';
+            toggleModal('uploadModal');
+            render();
+        }
+
+        function addToCart(id) {
+            const item = products.find(p => p.id === id);
+            cart.push(item);
+            updateCart();
+            toggleModal('cartModal');
+        }
+
+        function updateCart() {
+            document.getElementById('cartCount').innerText = cart.length;
+            const container = document.getElementById('cartItems');
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                total += Number(item.price);
+                return `
+                    <div class="cart-item">
+                        <img src="${item.img}">
+                        <div>
+                            <div style="font-size:12px; font-weight:bold;">${item.name}</div>
+                            <div style="font-size:12px; color:#f97316;">UGX ${Number(item.price).toLocaleString()}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('cartTotal').innerText = total.toLocaleString();
+        }
+
+        function checkoutWA() {
+            if(cart.length === 0) return alert('Cart is empty!');
+            
+            let total = cart.reduce((sum, i) => sum + Number(i.price), 0);
+            let newOrder = {
+                id: Date.now(),
+                date: new Date().toLocaleString(),
+                items: [...cart],
+                total: total
+            };
+            
+            orders.unshift(newOrder);
+            localStorage.setItem('apex_store_orders', JSON.stringify(orders));
+            if(sessionStorage.getItem('apex_admin') === 'true') {
+                updateOrdersBadge();
+            }
+
+            let msg = 'Hello Apex Online Store, I would like to order:\n';
+            cart.forEach((i, idx) => { msg += `${idx+1}. ${i.name} - UGX ${Number(i.price).toLocaleString()}\n`; });
+            window.open(`https://wa.me/256702234732?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function searchItems() {
+            const q = document.getElementById('searchBar').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(q) || (p.desc && p.desc.toLowerCase().includes(q)));
+            const grid = document.getElementById('productGrid');
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="empty-state"><p>No items found matching "${q}"</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card" onclick="viewDetails(${p.id})">
+                    <img src="${p.img}" class="product-img">
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-price">UGX ${Number(p.price).toLocaleString()}</div>
+                        <div class="product-desc-preview">${p.desc || 'Tap to view full description and specifications.'}</div>
+                    </div>
+                    <div class="card-actions" onclick="event.stopPropagation()">
+                        <button class="btn-buy-card" onclick="addToCart(${p.id})">Add to Cart</button>
+                        <a href="https://wa.me/256702234732?text=I%20want%20to%20buy%20${encodeURIComponent(p.name)}" class="btn-wa-card" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        render();
+    </script>
+</body>
+</html>
