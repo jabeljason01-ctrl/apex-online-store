@@ -4,47 +4,254 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apex Online Store - Shopping made easy</title>
-    <!-- Tailwind CSS for modern styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            DEFAULT: '#f97316', // Jumia-style orange
-                            dark: '#c2410c',
-                            light: '#ffedd5'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #f4f5f7; color: #333; padding-bottom: 40px; }
+        
+        /* Top Banner */
+        .top-bar { background: #111827; color: #fff; padding: 8px 15px; font-size: 12px; text-align: center; }
+        .top-bar a { color: #f97316; text-decoration: none; font-weight: bold; margin: 0 5px; }
 
-    <!-- Top Announcement Bar -->
-    <div class="bg-gray-900 text-white text-xs py-2 px-4">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-            <div class="flex items-center gap-4">
-                <span><i class="fa-solid fa-phone text-brand mr-1"></i> +256 702 234 732</span>
-                <span><i class="fa-solid fa-envelope text-brand mr-1"></i> Jabeljason01@gmail.com</span>
+        /* Header */
+        header { background: #fff; padding: 12px 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .nav-container { display: flex; justify-content: space-between; items-center: center; max-width: 1100px; margin: 0 auto; }
+        .logo-title { font-size: 20px; font-weight: 900; color: #111; text-decoration: none; }
+        .logo-title span { color: #f97316; }
+        .motto { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; display: block; }
+        
+        .header-btns { display: flex; gap: 8px; align-items: center; }
+        .btn-add { background: #fff3eb; color: #f97316; border: 1px solid #f97316; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .btn-cart { background: #f97316; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; position: relative; }
+        .cart-badge { background: #dc2626; color: #fff; font-size: 10px; border-radius: 50%; padding: 2px 6px; position: absolute; top: -5px; right: -5px; }
+
+        /* Hero */
+        .hero { max-width: 1100px; margin: 15px auto; padding: 0 15px; }
+        .hero-card { background: linear-gradient(135deg, #111827, #1f2937); color: #fff; padding: 20px; border-radius: 12px; text-align: center; }
+        .hero-card h1 { font-size: 22px; margin-bottom: 8px; }
+        .hero-card p { font-size: 13px; color: #d1d5db; margin-bottom: 15px; }
+        .contact-actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .btn-wa { background: #25d366; color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-call { background: #fff; color: #111; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; }
+
+        /* Search & Products */
+        .main-content { max-width: 1100px; margin: 15px auto; padding: 0 15px; }
+        .search-box { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; margin-bottom: 15px; outline: none; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media(min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 15px; } }
+
+        .product-card { background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-img { width: 100%; height: 140px; object-fit: cover; background: #eee; }
+        .product-info { padding: 10px; }
+        .product-title { font-size: 13px; font-weight: bold; color: #111; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        .product-price { color: #f97316; font-size: 14px; font-weight: 800; margin-bottom: 8px; }
+        .card-actions { padding: 0 10px 10px; display: flex; gap: 6px; }
+        .btn-buy-card { flex: 1; background: #f97316; color: #fff; border: none; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
+        .btn-wa-card { background: #25d366; color: #fff; text-decoration: none; padding: 6px 10px; border-radius: 6px; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; padding: 15px; }
+        .modal-content { background: #fff; width: 100%; max-width: 400px; padding: 20px; border-radius: 12px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 11px; font-weight: bold; color: #555; margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
+        .btn-submit { width: 100%; background: #f97316; color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; }
+
+        /* Cart Slideout */
+        .cart-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; justify-content: flex-end; }
+        .cart-body { background: #fff; width: 100%; max-width: 350px; height: 100%; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+        .cart-items { flex: 1; overflow-y: auto; margin: 15px 0; }
+        .cart-item { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .cart-item img { width: 50px; height: 50px; object-cover: cover; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        Call: <a href="tel:+256702234732">+256 702 234 732</a> | Email: <a href="mailto:Jabeljason01@gmail.com">Jabeljason01@gmail.com</a>
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <div>
+                <a href="#" class="logo-title">APEX <span>ONLINE</span></a>
+                <span class="motto">Shopping made easy</span>
             </div>
-            <div class="text-brand font-medium">
-                ⚡ Free & Fast Delivery Available in Kampala!
+            <div class="header-btns">
+                <button class="btn-add" onclick="toggleModal('uploadModal')"><i class="fa-solid fa-plus"></i> Upload</button>
+                <button class="btn-cart" onclick="toggleModal('cartModal')"><i class="fa-solid fa-cart-shopping"></i> <span id="cartCount" class="cart-badge">0</span></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="hero-card">
+            <h1>Apex Online Store</h1>
+            <p>Quality hardware, protective shields, weighing accessories & essentials in Kampala.</p>
+            <div class="contact-actions">
+                <a href="https://wa.me/256702234732" class="btn-wa" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp Us</a>
+                <a href="tel:+256702234732" class="btn-call"><i class="fa-solid fa-phone"></i> Call Direct</a>
             </div>
         </div>
     </div>
 
-    <!-- Main Navigation Header -->
-    <header class="sticky top-0 z-40 bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-            <!-- Brand Logo & Motto -->
-            <a href="#" class="flex flex-col">
-                <span class="text-2xl font-black tracking-tight text-gray-900 flex items-center gap-1.5">
-                    APEX <span class="text-brand">ONLINE</span>
-                </span>
-                <span class="text-
+    <div class="main-content">
+        <input type="text" id="searchBar" class="search-box" placeholder="Search products..." oninput="searchItems()">
+        <div id="productGrid" class="grid"></div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Item</h3>
+                <span style="cursor:pointer;" onclick="toggleModal('uploadModal')">&times;</span>
+            </div>
+            <form onsubmit="saveProduct(event)">
+                <div class="form-group">
+                    <label>Item Name</label>
+                    <input type="text" id="pName" required placeholder="e.g. Weighing Scale Shield">
+                </div>
+                <div class="form-group">
+                    <label>Price (UGX)</label>
+                    <input type="number" id="pPrice" required placeholder="e.g. 50000">
+                </div>
+                <div class="form-group">
+                    <label>Product Photo</label>
+                    <input type="file" id="pImg" accept="image/*" onchange="convertImg(event)">
+                </div>
+                <button type="submit" class="btn-submit">Publish Product</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-body">
+            <div>
+                <div class="modal-header">
+                    <h3>Your Cart</h3>
+                    <span style="cursor:pointer;" onclick="toggleModal('cartModal')">&times;</span>
+                </div>
+                <div id="cartItems" class="cart-items"></div>
+            </div>
+            <div>
+                <h4 style="margin-bottom:10px;">Total: UGX <span id="cartTotal">0</span></h4>
+                <a href="#" onclick="checkoutWA()" class="btn-wa" style="width:100%; text-align:center; justify-content:center; padding:12px; margin-bottom:8px;"><i class="fa-brands fa-whatsapp"></i> Checkout on WhatsApp</a>
+                <a href="tel:+256702234732" class="btn-call" style="width:100%; text-align:center; justify-content:center; padding:10px; border:1px solid #ccc;"><i class="fa-solid fa-phone"></i> Order via Direct Call</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const initialProducts = [
+            { id: 1, name: "Apex Indicator Protective Shield", price: 45000, img: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=300" },
+            { id: 2, name: "Digital Bench Scale (300kg)", price: 450000, img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300" },
+            { id: 3, name: "Weighing Indicator A12", price: 180000, img: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=300" }
+        ];
+
+        let products = JSON.parse(localStorage.getItem('apex_store_items')) || initialProducts;
+        let cart = [];
+        let tempImg = '';
+
+        function render() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}" class="product-img" onerror="this.src='https://via.placeholder.com/150'">
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-price">UGX ${Number(p.price).toLocaleString()}</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-buy-card" onclick="addToCart(${p.id})">Add to Cart</button>
+                        <a href="https://wa.me/256702234732?text=I%20want%20to%20buy%20${encodeURIComponent(p.name)}" class="btn-wa-card" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleModal(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function convertImg(e) {
+            const reader = new FileReader();
+            reader.onload = function() { tempImg = reader.result; };
+            if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            const name = document.getElementById('pName').value;
+            const price = document.getElementById('pPrice').value;
+            const img = tempImg || 'https://via.placeholder.com/150';
+
+            products.unshift({ id: Date.now(), name, price, img });
+            localStorage.setItem('apex_store_items', JSON.stringify(products));
+            
+            document.getElementById('pName').value = '';
+            document.getElementById('pPrice').value = '';
+            tempImg = '';
+            toggleModal('uploadModal');
+            render();
+        }
+
+        function addToCart(id) {
+            const item = products.find(p => p.id === id);
+            cart.push(item);
+            updateCart();
+            toggleModal('cartModal');
+        }
+
+        function updateCart() {
+            document.getElementById('cartCount').innerText = cart.length;
+            const container = document.getElementById('cartItems');
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                total += Number(item.price);
+                return `
+                    <div class="cart-item">
+                        <img src="${item.img}">
+                        <div>
+                            <div style="font-size:12px; font-weight:bold;">${item.name}</div>
+                            <div style="font-size:12px; color:#f97316;">UGX ${Number(item.price).toLocaleString()}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('cartTotal').innerText = total.toLocaleString();
+        }
+
+        function checkoutWA() {
+            if(cart.length === 0) return alert('Cart is empty!');
+            let msg = 'Hello Apex Online Store, I would like to order:\n';
+            cart.forEach((i, idx) => { msg += `${idx+1}. ${i.name} - UGX ${Number(i.price).toLocaleString()}\n`; });
+            window.open(`https://wa.me/256702234732?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function searchItems() {
+            const q = document.getElementById('searchBar').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(q));
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}" class="product-img">
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-price">UGX ${Number(p.price).toLocaleString()}</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-buy-card" onclick="addToCart(${p.id})">Add to Cart</button>
+                        <a href="https://wa.me/256702234732?text=I%20want%20to%20buy%20${encodeURIComponent(p.name)}" class="btn-wa-card" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        render();
+    </script>
+</body>
+</html>
