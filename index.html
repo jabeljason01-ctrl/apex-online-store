@@ -21,7 +21,7 @@
         .motto { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; display: block; }
         
         .header-btns { display: flex; gap: 8px; align-items: center; }
-        .btn-add { background: #fff3eb; color: #f97316; border: 1px solid #f97316; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .btn-add { display: none; background: #fff3eb; color: #f97316; border: 1px solid #f97316; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
         .btn-cart { background: #f97316; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; position: relative; }
         .cart-badge { background: #dc2626; color: #fff; font-size: 10px; border-radius: 50%; padding: 2px 6px; position: absolute; top: -5px; right: -5px; }
 
@@ -50,6 +50,10 @@
         .btn-wa-card { background: #25d366; color: #fff; text-decoration: none; padding: 6px 10px; border-radius: 6px; font-size: 12px; display: flex; align-items: center; justify-content: center; }
 
         .empty-state { text-align: center; color: #888; font-size: 13px; grid-column: 1 / -1; padding: 40px 10px; }
+
+        /* Footer Admin Link */
+        footer { text-align: center; margin-top: 40px; font-size: 11px; color: #888; }
+        footer a { color: #888; text-decoration: none; }
 
         /* Modal */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; padding: 15px; }
@@ -81,7 +85,7 @@
                 <span class="motto">Shopping made easy</span>
             </div>
             <div class="header-btns">
-                <button class="btn-add" onclick="toggleModal('uploadModal')"><i class="fa-solid fa-plus"></i> Upload</button>
+                <button id="addBtn" class="btn-add" onclick="toggleModal('uploadModal')"><i class="fa-solid fa-plus"></i> Upload</button>
                 <button class="btn-cart" onclick="toggleModal('cartModal')"><i class="fa-solid fa-cart-shopping"></i> <span id="cartCount" class="cart-badge">0</span></button>
             </div>
         </div>
@@ -102,6 +106,10 @@
         <input type="text" id="searchBar" class="search-box" placeholder="Search products..." oninput="searchItems()">
         <div id="productGrid" class="grid"></div>
     </div>
+
+    <footer>
+        &copy; 2026 Apex Online Store. All rights reserved. | <a href="#" onclick="adminLogin(event)">Admin Access</a>
+    </footer>
 
     <!-- Upload Modal -->
     <div id="uploadModal" class="modal">
@@ -147,15 +155,27 @@
     </div>
 
     <script>
-        // Completely empty initial array so you start with a clean store
         const initialProducts = [];
-
-        // Reset any old stored items so previous sample products disappear completely
-        localStorage.removeItem('apex_store_items');
-
         let products = JSON.parse(localStorage.getItem('apex_store_items')) || initialProducts;
         let cart = [];
         let tempImg = '';
+
+        // Check if admin was already unlocked in this browser session
+        if (sessionStorage.getItem('apex_admin') === 'true') {
+            document.getElementById('addBtn').style.display = 'inline-block';
+        }
+
+        function adminLogin(e) {
+            e.preventDefault();
+            const pin = prompt('Enter Admin PIN:');
+            if (pin === '1234') { // <--- You can change '1234' to any secret PIN you want!
+                sessionStorage.setItem('apex_admin', 'true');
+                document.getElementById('addBtn').style.display = 'inline-block';
+                alert('Admin unlocked! You can now see the Upload button.');
+            } else if (pin !== null) {
+                alert('Incorrect PIN!');
+            }
+        }
 
         function render() {
             const grid = document.getElementById('productGrid');
@@ -164,7 +184,7 @@
                     <div class="empty-state">
                         <i class="fa-solid fa-box-open" style="font-size:32px; margin-bottom:8px; color:#ccc;"></i>
                         <p>No products available yet.</p>
-                        <p style="font-size:11px; color:#aaa; margin-top:4px;">Tap <b>+ Upload</b> above to add your first item!</p>
+                        <p style="font-size:11px; color:#aaa; margin-top:4px;">Check back soon for new items!</p>
                     </div>
                 `;
                 return;
