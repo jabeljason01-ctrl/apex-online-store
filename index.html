@@ -188,7 +188,37 @@
     </div>
 
     <script>
-        const initialProducts = [];
+       const initialProducts = [
+    {
+        id: 101,
+        name: "Digital Pocket Scale",
+        price: 43000,
+        desc: "This is a very sensitive weighing scale of max capacity 50kg, portable and reliable.",
+        img: "https://via.placeholder.com/150"
+    },
+    {
+        id: 102,
+        name: "Spring balance",
+        price: 77500,
+        desc: "100kg weighing spring scale; strong, reliable and heavy duty.",
+        img: "https://via.placeholder.com/150"
+    },
+    {
+        id: 103,
+        name: "A12 Digital Platform",
+        price: 1300000,
+        desc: "A12 weighing scale of max capacity of 2000kgs, highly durable platform scale.",
+        img: "https://via.placeholder.com/150"
+    },
+    {
+        id: 104,
+        name: "Mechanical Weighing Scale",
+        price: 300000,
+        desc: "Indian mechanical strong weighing scale comes with weight bowl set.",
+        img: "https://via.placeholder.com/150"
+    }
+];
+ 
         let products = JSON.parse(localStorage.getItem('apex_store_items')) || initialProducts;
         let orders = JSON.parse(localStorage.getItem('apex_store_orders')) || [];
         let cart = [];
