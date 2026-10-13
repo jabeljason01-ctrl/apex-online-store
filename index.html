@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Online Store - Shopping made easy</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#f97316', // Jumia-style orange
+                            dark: '#c2410c',
+                            light: '#ffedd5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-gray-900 text-white text-xs py-2 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-4">
+                <span><i class="fa-solid fa-phone text-brand mr-1"></i> +256 702 234 732</span>
+                <span><i class="fa-solid fa-envelope text-brand mr-1"></i> Jabeljason01@gmail.com</span>
+            </div>
+            <div class="text-brand font-medium">
+                ⚡ Free & Fast Delivery Available in Kampala!
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <!-- Brand Logo & Motto -->
+            <a href="#" class="flex flex-col">
+                <span class="text-2xl font-black tracking-tight text-gray-900 flex items-center gap-1.5">
+                    APEX <span class="text-brand">ONLINE</span>
+                </span>
+                <span class="text-
